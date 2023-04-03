@@ -271,7 +271,7 @@ def montyHall22(loop_sim):
         # If the player chooses to switch, pick the remaining unopened door
         if switch_choice == "y":
             print(f"\nThe remaining doors are:")
-            print(remaining_doors)
+            print(remaining_doors) 
             new_choice = int(input("Which door would you like to switch to?\n   -> "))
 
             while new_choice not in [door for door in doors if door not in [player_choice, goat_door]]:
