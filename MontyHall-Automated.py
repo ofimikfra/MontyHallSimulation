@@ -10,7 +10,7 @@ def montyHallNormal(loop_sim):
     lose_switch = 0
     lose_monty = 0
 
-    num_doors = int(input("\nHow many doors do you want to simulate?\n    -> "))
+    num_doors = int(input("\nHow many doors do you want to simulate?\n     -> "))
     doors = set(range(1, num_doors + 1))
 
     i=0
