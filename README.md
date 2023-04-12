@@ -1,7 +1,7 @@
 # MONTY HALL PYTHON SIMULATION
 
 This is a program that simulates three different variations of the Monty Hall Problem:
-- Original/Normal Monty Hall
+- Original/Classic/Normal Monty Hall
 - Forgetful Monty Hall
 - Monty Hall with 2 goats & 2 doors
 
