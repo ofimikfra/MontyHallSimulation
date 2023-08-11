@@ -1,7 +1,7 @@
 import random
 import os
 
-def montyHallNormal(loop_sim):
+def montyHallOriginal(loop_sim):
 
     wins = 0
     losses = 0
@@ -247,10 +247,10 @@ def start():
     """)
 
     print("Welcome to the Monty Hall Simulator! Select the variation:")
-    mode = int(input("\n(1) Normal Monty Hall     (2) Forgetful Monty Hall     (3) 2 Goats 2 Cars\n     -> "))
+    mode = int(input("\n(1) Original Monty Hall     (2) Forgetful Monty Hall     (3) 2 Goats 2 Cars\n     -> "))
     loop = int(input("\nHow many times do you want to play the simulation?\n     -> "))
     if mode == 1:
-        montyHallNormal(loop)
+        montyHallOriginal(loop)
     elif mode == 2:
         montyHallForget(loop)
     elif mode == 3:
@@ -261,7 +261,7 @@ def results(loops, variation, doors_simulated, wins, losses, switches, win_switc
     
     if variation == 1:
         print(f"""
-SIMULATION RESULTS (Normal Monty Hall variation, {doors_simulated} doors, {loops} simulations):
+SIMULATION RESULTS (Original Monty Hall variation, {doors_simulated} doors, {loops} simulations):
 
 Total wins: {wins}
 Total losses: {losses}
