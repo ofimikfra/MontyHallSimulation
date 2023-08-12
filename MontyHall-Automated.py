@@ -1,7 +1,9 @@
 import random
 import os
+import pandas as pd
+import math
 
-def montyHallNormal(loop_sim):
+def montyHallOriginal(loop_sim):
 
     wins = 0
     losses = 0
@@ -23,7 +25,6 @@ def montyHallNormal(loop_sim):
         #DEBUGGING
         #old_player_choice = player_choice
 
-        # determine remaining door
         if player_choice == prize_door:
             # if chosen door has prize, remaining door is random door that is not prize door
             remaining_door = random.choice(list(doors - {player_choice}))
@@ -41,11 +42,7 @@ def montyHallNormal(loop_sim):
 
         if player_choice == prize_door:
             wins+=1
-            #DEBUGGING
-            #print("\nwin")
         else:
-            #DEBUGGING
-            #print("\nlose")
             losses+=1
 
         #results calculator
@@ -162,7 +159,7 @@ def montyHall22(loop_sim):
     lose_switch = 0
     lose_monty = 0
 
-    doors = [1, 2, 3, 4]
+    doors = [1,2,3,4]
 
     i=0
 
@@ -243,70 +240,88 @@ def start():
 ███████║██║██║ ╚═╝ ██║╚██████╔╝███████╗██║  ██║   ██║   ╚██████╔╝██║  ██║           
 ╚══════╝╚═╝╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝        
 
---------------------------------------------------------------------------------
+================================================================================
     """)
 
     print("Welcome to the Monty Hall Simulator! Select the variation:")
-    mode = int(input("\n(1) Normal Monty Hall     (2) Forgetful Monty Hall     (3) 2 Goats 2 Cars\n     -> "))
-    loop = int(input("\nHow many times do you want to play the simulation?\n     -> "))
+    mode = int(input("\n(1) Original Monty Hall     (2) Forgetful Monty Hall     (3) 2 Goats & 2 Cars\n     -> "))
+    loop = int(input("\nHow many times do you want to run the simulation?\n     -> "))
     if mode == 1:
-        montyHallNormal(loop)
+        montyHallOriginal(loop)
     elif mode == 2:
         montyHallForget(loop)
     elif mode == 3:
         montyHall22(loop)
 
+modes = {1:"Original Monty Hall", 2:"Forgetful Monty Hall", 3:"Monty Hall with 2 goats & 2 cars"}
+
 def results(loops, variation, doors_simulated, wins, losses, switches, win_switch, lose_switch, lose_monty):
-    print("\n--------------------------------------------------------------------------------\n")
+    print("\n================================================================================\n")
     
     if variation == 1:
-        print(f"""
-SIMULATION RESULTS (Normal Monty Hall variation, {doors_simulated} doors, {loops} simulations):
+        print(f"SIMULATION RESULTS ({modes[variation]}, {doors_simulated} doors, {loops} simulations):\n")
 
-Total wins: {wins}
-Total losses: {losses}
-Number of times switched: {switches}
-Wins due to switching: {win_switch}
-Losses due to switching: {lose_switch}
+        winperc = round(((wins/loops)*100),2) + "%"
+        lossperc = round((losses/loops)*100,2) + "%"
+        win_switch_perc = round((win_switch/switches)*100,2) + "%"
+        loss_switch_perc = round((lose_switch/switches)*100,2) + "%"
 
-Win percentage: {round((wins/loops)*100,2)}%
-Lose percentage: {round((losses/loops)*100,2)}%
-Probability of winning due to switching: {round((win_switch/switches)*100,2)}%
-Probability of losing due to switching: {round((lose_switch/switches)*100,2)}%""")
+        return {
+            "Total wins": {wins},
+            "Total losses": {losses},
+            "Number of times switched": {switches},
+            "Wins due to switching": {win_switch},
+            "Losses due to switching": {lose_switch},
+            "Win percentage": {winperc},
+            "Lose percentage": {lossperc},
+            "Probability of winning due to switching": {win_switch_perc},
+            "Probability of losing due to switching": {loss_switch_perc},
+        }
               
     elif variation == 2:
-        print(f"""
-SIMULATION RESULTS (Forgetful Monty Hall variation, {doors_simulated} doors, {loops} simulations):
+        print(f"SIMULATION RESULTS (, {doors_simulated} doors, {loops} simulations):\n")
 
-Total wins: {wins}
-Total losses: {losses}
-Number of times switched: {switches}
-Wins due to switching: {win_switch}
-Losses due to switching: {lose_switch}
-Losses due to Monty: {lose_monty}
+        winperc = round(((wins/loops)*100),2) + "%"
+        lossperc = round((losses/loops)*100,2) + "%"
+        win_switch_perc = round((win_switch/switches)*100,2) + "%"
+        loss_switch_perc = round((lose_switch/switches)*100,2) + "%"
+        loss_monty_perc = round((lose_monty/loops)*100,2) + "%"
 
-Win percentage: {round((wins/loops)*100,2)}%
-Lose percentage: {round((losses/loops)*100,2)}%
-Probability of winning due to switching: {round((win_switch/switches)*100,2)}%
-Probability of losing due to switching: {round((lose_switch/switches)*100,2)}%
-Probability of losing due to Monty: {round((lose_monty/loops)*100,2)}%""")
-              
+        return {
+            "Total wins": {wins},
+            "Total losses": {losses},
+            "Number of times switched": {switches},
+            "Wins due to switching": {win_switch},
+            "Losses due to switching": {lose_switch},
+            "Losses due to Monty": {lose_monty},
+            "Win percentage": {winperc},
+            "Lose percentage": {lossperc},
+            "Probability of winning due to switching": {win_switch_perc},
+            "Probability of losing due to switching": {loss_switch_perc},
+            "Probability of losing due to Monty": {loss_monty_perc}
+        }
+
     elif variation == 3:
-        print(f"""
-SIMULATION RESULTS (Monty Hall with 2 goats & 2 doors variation, {doors_simulated} doors, {loops} simulations):
+        print(f"SIMULATION RESULTS ({modes[variation]}, {doors_simulated} doors, {loops} simulations):\n")
 
-Total wins: {wins}
-Total losses: {losses}
-Number of times switched: {switches}
-Wins due to switching: {win_switch}
-Losses due to switching: {lose_switch}
+        winperc = round(((wins/loops)*100),2) + "%"
+        lossperc = round((losses/loops)*100,2) + "%"
+        win_switch_perc = round((win_switch/switches)*100,2) + "%"
+        loss_switch_perc = round((lose_switch/switches)*100,2) + "%"
 
-Win percentage: {round((wins/loops)*100,2)}%
-Lose percentage: {round((losses/loops)*100,2)}%
-Probability of winning due to switching: {round((win_switch/switches)*100,2)}%
-Probability of losing due to switching: {round((lose_switch/switches)*100,2)}%""")
+        return {
+            "Total wins": {wins},
+            "Total losses": {losses},
+            "Number of times switched": {switches},
+            "Wins due to switching": {win_switch},
+            "Losses due to switching": {lose_switch},
+            "Win percentage": {winperc},
+            "Lose percentage": {lossperc},
+            "Probability of winning due to switching": {win_switch_perc},
+            "Probability of losing due to switching": {loss_switch_perc},
+        }
 
-    print("\n--------------------------------------------------------------------------------")
+    print("\n================================================================================\n")
 
 os.system('clear')
 start()
