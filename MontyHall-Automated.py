@@ -1,81 +1,46 @@
 import random
 import os
 import pandas as pd
-import math
 
 def montyHallOriginal(loop_sim):
 
-    wins = 0
-    losses = 0
-    switches = 0
-    win_switch = 0
-    lose_switch = 0
-    lose_monty = 0
-
     num_doors = int(input("\nHow many doors do you want to simulate?\n     -> "))
-    doors = set(range(1, num_doors + 1))
+    doors = list(range(1, num_doors + 1))
 
     i=0
     
     while i < loop_sim:
 
-        prize_door = random.randint(1, num_doors)
-        player_choice = random.randint(1,num_doors)
-
-        #DEBUGGING
-        #old_player_choice = player_choice
+        prize_door = random.choice(doors)
+        player_choice = random.choice(doors)
+        init_choice = player_choice
 
         if player_choice == prize_door:
-            # if chosen door has prize, remaining door is random door that is not prize door
-            remaining_door = random.choice(list(doors - {player_choice}))
+            remaining_door = random.choice([door for door in doors if door != player_choice])
         else:
-            # if chosen door does not have prize, remaining door is door with the prize
             remaining_door = prize_door
 
-        #switch/stick door
+        rem_doors = [player_choice, remaining_door]
+
         yn = ["y", "n"]
         switch_choice = random.choice(yn)
     
         if switch_choice == 'y':
             player_choice = remaining_door
-            switches+=1
 
-        if player_choice == prize_door:
-            wins+=1
-        else:
-            losses+=1
+        if_switch = True if switch_choice == "y" else False
 
-        #results calculator
-        if switch_choice == "y" and player_choice == prize_door:
-            win_switch+=1
-        elif switch_choice == "y" and player_choice != prize_door:
-            lose_switch+=1
+        res = "WIN" if player_choice == prize_door else "LOSE"
 
-        #DEBUGGING
-        #print(f"""
-        #Doors: {num_doors}
-        #Prize door: {prize_door}
-        #Player choice: {old_player_choice}
-        #Remaining door: {remaining_door}""")
-        #if switch_choice == "y":
-        #    print(f"""
-        #    Switch choice: {switch_choice}
-        #    Player choice (new): {player_choice}""")
+        simResults(3, i+1, res, if_switch, prize_door, init_choice, rem_doors, player_choice, 0)
 
         i+=1
 
-    results(loop_sim, 1, num_doors, wins, losses, switches, win_switch, lose_switch, lose_monty)
+    results(sim_results, 1, doors, loop_sim)
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
 def montyHallForget(loop_sim):
-
-    wins = 0
-    losses = 0
-    switches = 0
-    win_switch = 0
-    lose_switch = 0
-    lose_monty = 0
 
     doors = [1,2,3]
 
@@ -85,11 +50,8 @@ def montyHallForget(loop_sim):
 
         prize_door = random.choice(doors)
         player_choice = random.randint(1,3)
+        init_choice = player_choice
 
-        #DEBUGGING
-        #old_player_choice = player_choice
-
-        # Monty chooses a door that doesn't have the prize and isn't the player's choice
         monty_choices = doors.copy()
         if player_choice == prize_door:
             monty_choices.remove(prize_door)
@@ -99,65 +61,34 @@ def montyHallForget(loop_sim):
         monty_choice = random.choice(monty_choices)
 
         if monty_choice == prize_door:
-            lose_monty+=1
-            losses+=1
-            #DEBUGGING
-            #print("\nlose")
+            res = "LOSE"
+            if_switch = "N/A"
+            rem_doors = "N/A"
 
         else:
-            # Ask the player if they want to switch or stick with their initial choice
             yn = ["y", "n"]
             switch_choice = random.choice(yn)
             if switch_choice == "y":
-                remaining_doors = [door for door in doors if door != player_choice and door != monty_choice]
-                player_choice = remaining_doors[0]
-                switches+=1
+                remaining_door = [door for door in doors if door != player_choice and door != monty_choice]
+                player_choice = remaining_door
 
-            # Check if the player's final choice is the winning door and display the result
-            if player_choice == prize_door:
-                #DEBUGGING
-                #print("\nwin")
-                wins+=1
-            else:
-                #DEBUGGING
-                #print("\nlose")
-                losses+=1
+                rem_doors = [door for door in doors if door != monty_choice]
 
-            #results calculator
-            if switch_choice.lower() == "y" and player_choice == prize_door:
-                win_switch+=1
-            elif switch_choice.lower() == "y" and player_choice != prize_door:
-                lose_switch+=1
+                #do the door for door in doors if door != monty_choice
 
-        #DEBUGGING
-        #print(f"""
-        #Doors: {doors}
-        #Prize door: {prize_door}
-        #Player choice: {old_player_choice}
-        #Monty's door choices: {monty_choices}
-        #Monty's choice: {monty_choice}""")
-        #if monty_choice != prize_door:
-        #    print(f"""
-        #    Switch choice: {switch_choice}""")
-        #    if switch_choice == "y":
-        #        print(f"""
-        #    Remaining doors: {remaining_doors}
-        #    Player choice (new): {player_choice}""")
+            if_switch = True if switch_choice == "y" else False
+
+            res = "WIN" if player_choice == prize_door else "LOSE"
+
+        simResults(2, i+1, res, if_switch, prize_door, init_choice, rem_doors, player_choice, monty_choice)
 
         i+=1
 
-    results(loop_sim, 2, 3, wins, losses, switches, win_switch, lose_switch, lose_monty)
+    results(sim_results, 2, 3, loop_sim)
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
-def montyHall22(loop_sim):
-
-    wins = 0
-    losses = 0
-    switches = 0
-    win_switch = 0
-    lose_switch = 0
-    lose_monty = 0
+def montyHall2P(loop_sim):
 
     doors = [1,2,3,4]
 
@@ -165,61 +96,34 @@ def montyHall22(loop_sim):
 
     while i < loop_sim:
 
-        car_doors = random.sample(doors, 2)
-        goat_doors = [door for door in doors if door not in car_doors]
+        prize_doors = random.sample(doors, 2)
+        goat_doors = [door for door in doors if door not in prize_doors]
 
         player_choice = random.randint(1,4)
+        init_choice = player_choice
 
-        #DEBUGGING
-        #old_player_choice = player_choice
-
-        #Reveal one of the goat doors that the player didn't choose
         remaining_doors = doors.copy()
         remaining_doors.remove(player_choice)
         goat_door = random.choice([door for door in remaining_doors if door in goat_doors])
         remaining_doors.remove(goat_door)
+
+        rem_doors = remaining_doors + [player_choice]
             
-        #Ask the player if they want to switch doors
         yn = ["y", "n"]
         switch_choice = random.choice(yn)
 
         if switch_choice == "y":
-            new_choice = random.choice(remaining_doors)
-            player_choice = new_choice
-            switches+=1
+            player_choice = random.choice(remaining_doors)
+        
+        if_switch = True if switch_choice == "y" else False
 
-        # Determine if the player won or lost
-        if player_choice in car_doors:
-            wins+=1
-            #DEBUGGING
-            #print("\nwin")
-        else:
-            losses+=1
-            #DEBUGGING
-            #print("\nlose")
+        res = "WIN" if player_choice in prize_doors else "LOSE"
 
-        #results calculator
-        if switch_choice.lower() == "y" and player_choice in car_doors:
-            win_switch+=1
-        elif switch_choice.lower() == "y" and player_choice not in car_doors:
-            lose_switch+=1
-
-        #DEBUGGING
-        #print(f"""
-        #Car doors: {car_doors}
-        #Goat doors: {goat_doors}
-        #Player choice: {old_player_choice}
-        #Goat door: {goat_door}
-        #Remaining doors: {remaining_doors}
-        #Switch choice: {switch_choice}""")
-        #if switch_choice == "y":
-        #    print(f"""
-        #    New choice: {new_choice}
-        #    Player choice (new): {player_choice}""")
+        simResults(3, i+1, res, if_switch, prize_doors, init_choice, rem_doors, player_choice, 0)
 
         i+=1
 
-    results(loop_sim, 3, 4, wins, losses, switches, win_switch, lose_switch, lose_monty)
+    results(sim_results, 3, 4, loop_sim)
 
 # ------------------------------------------------------------------------------------------------------------------------------------
 
@@ -240,88 +144,96 @@ def start():
 ███████║██║██║ ╚═╝ ██║╚██████╔╝███████╗██║  ██║   ██║   ╚██████╔╝██║  ██║           
 ╚══════╝╚═╝╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝        
 
-================================================================================
+===========================================================================+++++=====
     """)
 
     print("Welcome to the Monty Hall Simulator! Select the variation:")
-    mode = int(input("\n(1) Original Monty Hall     (2) Forgetful Monty Hall     (3) 2 Goats & 2 Cars\n     -> "))
+    mode = int(input("\n(1) Original Monty Hall     (2) Forgetful Monty Hall     (3) 2 Prize Monty Hall\n     -> "))
     loop = int(input("\nHow many times do you want to run the simulation?\n     -> "))
     if mode == 1:
         montyHallOriginal(loop)
     elif mode == 2:
         montyHallForget(loop)
     elif mode == 3:
-        montyHall22(loop)
+        montyHall2P(loop)
 
-modes = {1:"Original Monty Hall", 2:"Forgetful Monty Hall", 3:"Monty Hall with 2 goats & 2 cars"}
+modes = {1:"Original Monty Hall", 2:"Forgetful Monty Hall", 3:"2 Prize Monty Hall"}
+sim_results = []
 
-def results(loops, variation, doors_simulated, wins, losses, switches, win_switch, lose_switch, lose_monty):
-    print("\n================================================================================\n")
+def simResults(variation, sim_num, res, if_switch, prize_door, init_choice, rem_doors, final_choice, monty_choice):
+
+    if variation == 1 or variation == 3:
+        sim_results.append(
+            {
+                "Sim No.": sim_num,
+                "Result": res,
+                "Switched": if_switch,
+                "Prize Door/s": prize_door,
+                "Initial choice": init_choice,
+                "Remaining doors": rem_doors,
+                "Final choice": final_choice
+            }
+        )
     
-    if variation == 1:
-        print(f"SIMULATION RESULTS ({modes[variation]}, {doors_simulated} doors, {loops} simulations):\n")
-
-        winperc = round(((wins/loops)*100),2) + "%"
-        lossperc = round((losses/loops)*100,2) + "%"
-        win_switch_perc = round((win_switch/switches)*100,2) + "%"
-        loss_switch_perc = round((lose_switch/switches)*100,2) + "%"
-
-        return {
-            "Total wins": {wins},
-            "Total losses": {losses},
-            "Number of times switched": {switches},
-            "Wins due to switching": {win_switch},
-            "Losses due to switching": {lose_switch},
-            "Win percentage": {winperc},
-            "Lose percentage": {lossperc},
-            "Probability of winning due to switching": {win_switch_perc},
-            "Probability of losing due to switching": {loss_switch_perc},
-        }
-              
     elif variation == 2:
-        print(f"SIMULATION RESULTS (, {doors_simulated} doors, {loops} simulations):\n")
+        sim_results.append(
+            {
+                "Sim No.": sim_num,
+                "Result": res,
+                "Switched": if_switch,
+                "Prize Door/s": prize_door,
+                "Initial choice": init_choice,
+                "Monty's choice": monty_choice,
+                "Remaining doors": rem_doors,
+                "Final choice": final_choice
+            }
+        )
 
-        winperc = round(((wins/loops)*100),2) + "%"
-        lossperc = round((losses/loops)*100,2) + "%"
-        win_switch_perc = round((win_switch/switches)*100,2) + "%"
-        loss_switch_perc = round((lose_switch/switches)*100,2) + "%"
-        loss_monty_perc = round((lose_monty/loops)*100,2) + "%"
-
-        return {
-            "Total wins": {wins},
-            "Total losses": {losses},
-            "Number of times switched": {switches},
-            "Wins due to switching": {win_switch},
-            "Losses due to switching": {lose_switch},
-            "Losses due to Monty": {lose_monty},
-            "Win percentage": {winperc},
-            "Lose percentage": {lossperc},
-            "Probability of winning due to switching": {win_switch_perc},
-            "Probability of losing due to switching": {loss_switch_perc},
-            "Probability of losing due to Monty": {loss_monty_perc}
-        }
-
-    elif variation == 3:
-        print(f"SIMULATION RESULTS ({modes[variation]}, {doors_simulated} doors, {loops} simulations):\n")
-
-        winperc = round(((wins/loops)*100),2) + "%"
-        lossperc = round((losses/loops)*100,2) + "%"
-        win_switch_perc = round((win_switch/switches)*100,2) + "%"
-        loss_switch_perc = round((lose_switch/switches)*100,2) + "%"
-
-        return {
-            "Total wins": {wins},
-            "Total losses": {losses},
-            "Number of times switched": {switches},
-            "Wins due to switching": {win_switch},
-            "Losses due to switching": {lose_switch},
-            "Win percentage": {winperc},
-            "Lose percentage": {lossperc},
-            "Probability of winning due to switching": {win_switch_perc},
-            "Probability of losing due to switching": {loss_switch_perc},
-        }
+def results(results, variation, doors_simulated, loops):
 
     print("\n================================================================================\n")
+    print(f"SIMULATION RESULTS ({modes[variation]}, {doors_simulated} doors, {loops} simulations):\n")
+
+    df_per_sim = pd.DataFrame(results)
+    df_per_sim.set_index("Sim No.", inplace=True)
+    print(df_per_sim)
+
+
+#use pandas to calculate results
+
+
+    #if variation == 1 or 3:
+
+    #    res = {
+    #        "Total wins": wins,
+    #        "Total losses": losses,
+    #        "Number of times switched": switches,
+    #        "Wins due to switching": win_switch,
+    #        "Losses due to switching": lose_switch,
+    #        "Win percentage": f"{winperc}%",
+    #        "Lose percentage": f"{lossperc}%",
+    #        "Probability of winning due to switching": f"{win_switch_perc}%",
+    #        "Probability of losing due to switching": f"{loss_switch_perc}%"
+    #    }
+    #          
+    #elif variation == 2:
+
+    #    res = {
+    #        "Total wins": wins,
+    #        "Total losses": losses,
+    #        "Number of times switched": switches,
+    #        "Wins due to switching": win_switch,
+    #        "Losses due to switching": lose_switch,
+    #        "Losses due to Monty": lose_monty,
+    #        "Win percentage": f"{winperc}%",
+    #        "Lose percentage": f"{lossperc}%",
+    #        "Probability of winning due to switching": f"{win_switch_perc}%",
+    #        "Probability of losing due to switching": f"{loss_switch_perc}%",
+    #        "Probability of losing due to Monty": f"{loss_monty_perc}%"
+    #    }
+
+    #print(pd.DataFrame.from_dict(res, orient='index', columns=['Results']))
+
 
 os.system('clear')
 start()
