@@ -3,14 +3,7 @@ import os
 import pandas as pd
 from tabulate import tabulate
 
-def montyHallNormal(loop_sim):
-
-    wins = 0
-    losses = 0
-    switches = 0
-    win_switch = 0
-    lose_switch = 0
-    lose_monty = 0
+def montyHallOriginal(loop_sim):
 
     num_doors = int(input("\nHow many doors do you want to simulate?\n     -> "))
     doors = list(range(1, num_doors + 1))
@@ -155,8 +148,8 @@ def start():
     """)
 
     print("Welcome to the Monty Hall Simulator! Select the variation:")
-    mode = int(input("\n(1) Normal Monty Hall     (2) Forgetful Monty Hall     (3) 2 Goats 2 Cars\n     -> "))
-    loop = int(input("\nHow many times do you want to play the simulation?\n     -> "))
+    mode = int(input("\n(1) Original Monty Hall     (2) Forgetful Monty Hall     (3) 2 Prize Monty Hall\n     -> "))
+    loop = int(input("\nHow many times do you want to run the simulation?\n     -> "))
     if mode == 1:
         montyHallOriginal(loop)
     elif mode == 2:
@@ -182,9 +175,41 @@ def simResults(variation, sim_num, res, if_switch, prize_door, init_choice, rem_
             }
         )
     
-    if variation == 1:
-        print(f"""
-SIMULATION RESULTS (Normal Monty Hall variation, {doors_simulated} doors, {loops} simulations):
+    elif variation == 2:
+        sim_results.append(
+            {
+                "Sim No.": sim_num,
+                "Result": res,
+                "Switched": if_switch,
+                "Prize door": prize_door,
+                "Initial choice": init_choice,
+                "Monty's choice": monty_choice,
+                "Remaining doors": rem_doors,
+                "Final choice": final_choice
+            }
+        )
+
+def results(results, variation, doors_simulated, loops):
+
+    print("\n==============================================================================================================\n")
+    print(f"\bSIMULATION RESULTS ({modes[variation]}, {doors_simulated} doors, {loops} simulations):\b\n")
+
+    df_per_sim = pd.DataFrame(results)
+
+    wins = len(df_per_sim[df_per_sim["Result"] == "WIN"])
+    losses = len(df_per_sim) - wins
+    switches = len(df_per_sim[df_per_sim["Switched"] == True])
+    win_switch = len(df_per_sim[(df_per_sim["Switched"] == True) & (df_per_sim["Result"] == "WIN")])
+    win_not_switch = len(df_per_sim[(df_per_sim["Switched"] == False) & (df_per_sim["Result"] == "WIN")])
+    lose_switch = len(df_per_sim[(df_per_sim["Switched"] == True) & (df_per_sim["Result"] == "LOSE")])
+    lose_not_switch = len(df_per_sim[(df_per_sim["Switched"] == False) & (df_per_sim["Result"] == "LOSE")])
+
+    winperc = round(((wins / len(df_per_sim)) * 100),2)
+    lossperc = round(((losses / len(df_per_sim)) * 100),2)
+    win_switch_perc = round(((win_switch / switches) * 100),2)
+    win_not_switch_perc = round(((win_not_switch / len(df_per_sim[(df_per_sim["Switched"] == False)])) * 100),2)
+    lose_switch_perc = round(((lose_switch / switches) * 100),2)
+    lose_not_switch_perc = round(((lose_not_switch / len(df_per_sim[(df_per_sim["Switched"] == False)])) * 100),2)
 
     if variation == 1 or variation == 3:
 
