@@ -14,7 +14,7 @@ This is the interactive version of the Monty Hall Simulator. You are able to con
 
 ### Original Monty Hall Problem
 The original Monty Hall problem consists of 3 doors: 2 of which contain goats and 1 that contains a prize. The objective is to choose the door containing the prize. After the initial choice, a door containing a goat is revealed and removed from the choices, leaving two doors unopened. 
-> This variation can be simulated with 3 doors or more.
+> This variation can be simulated with 3 doors or more. There will always be 2 remaining doors.
 
 ### Forgetful Monty Hall
 The forgetful Monty Hall variation is almost the same as the original, but the revealed door chosen randomly. There is a chance that the door containing the prize is revealed, ending in the player losing the game immediately.
