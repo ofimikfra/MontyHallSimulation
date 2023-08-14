@@ -182,7 +182,6 @@ def start():
         montyHallForget(loop)
     elif mode == 3:
         montyHall2P(loop)
-    #add custom monty hall: var num of doors, var num of prizes
 
 modes = {1:"Original Monty Hall", 2:"Forgetful Monty Hall", 3:"2 Prize Monty Hall"}
 sim_results = []
