@@ -17,6 +17,7 @@ def montyHallOriginal():
             print(f"\nInvalid choice. Choose a door between 1 and {num_doors}.")
         else:
             player_choice = int(player_choice)
+
             if player_choice not in doors:
                 print(f"\nInvalid choice. Choose a door between 1 and {num_doors}.")
             else:

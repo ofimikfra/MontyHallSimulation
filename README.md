@@ -21,5 +21,3 @@ The forgetful Monty Hall variation is almost the same as the original, but the r
 
 ### 2 Prize Monty Hall
 The 2 prize Monty Hall variation consists of 4 doors: 2 of which contain goats and the other 2 containing prizes. The mechanics are the same as the original Monty Hall problem except for the number of doors and prizes.
-
-# WIP
