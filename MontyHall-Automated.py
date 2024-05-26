@@ -5,9 +5,11 @@ from tabulate import tabulate
 
 def montyHallOriginal(loop_sim):
 
-    os.system('clear')
     global switchval, doorval
-    num_doors = int(input("\nHow many doors do you want to simulate?\n     -> "))
+    num_doors = int(input("\nHow many doors do you want to simulate?     -> "))
+
+    os.system('clear')
+
     doors = list(range(1, num_doors + 1))
 
     i=0
@@ -325,7 +327,9 @@ def results(results, variation, doors_simulated, loops):
     df_all.index.name = "Metrics"
     print(tabulate(df_all, headers="keys", tablefmt="simple"))
     print("\n==============================================================================================================\n")
+    print("SIMULATION RESULTS PER TRIAL")
     print(tabulate(df_per_sim, headers="keys", tablefmt="pretty"))
+    print("\n==============================================================================================================\n")
 
 os.system('clear')
 start()
