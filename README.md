@@ -1,4 +1,5 @@
 # MONTY HALL PYTHON SIMULATION
+> As part of a Mathematical Exploration Paper – "Solving the Monty Hall Problem Through Bayesian Decision Theory and Mathematical Modelling" 
 
 This program simulates three different variations of the Monty Hall Problem:
 - Original Monty Hall
