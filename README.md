@@ -1,5 +1,5 @@
 # MONTY HALL PYTHON SIMULATION
-> As part of a Mathematical Exploration Paper – "Solving the Monty Hall Problem Through Bayesian Decision Theory and Mathematical Modelling" 
+### As part of a Mathematical Exploration Paper – "Solving the Monty Hall Problem Through Bayesian Decision Theory and Mathematical Modelling" 
 
 This program simulates three different variations of the Monty Hall Problem:
 - Original Monty Hall
@@ -12,6 +12,8 @@ This is the automated version of the Monty Hall Simulator. Player choices are ra
 
 ## [Interactive Monty Hall Simulator](https://github.com/ofimikfra/MontyHallSimulation/blob/master/MontyHall-Interactive.py)
 This is the interactive version of the Monty Hall Simulator. You are able to control the choices through manual input.
+
+## Monty Hall Problem Variations
 
 ### Original Monty Hall Problem
 The original Monty Hall problem consists of 3 doors: 2 of which contain goats and 1 that contains a prize. The objective is to choose the door containing the prize. After the initial choice, a door containing a goat is revealed and removed from the choices, leaving two doors unopened. 
